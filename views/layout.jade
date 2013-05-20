@@ -1,0 +1,152 @@
+!!! 5
+html
+  head
+    meta(charset='utf-8')
+    title Giz A Lift
+    link(rel='stylesheet', href='stylesheets/bootstrap.min.css')
+    link(ref='stylesheet', href='stylesheets/bootstrap-responsive.min.css')
+    link(href='http://fonts.googleapis.com/css?family=Michroma|Advent+Pro:400,200,600|Titillium+Web:400,300,700', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='stylesheets/style.css')
+  body
+    script(type='text/x-handlebars', data-template-name='application')
+      header
+        nav
+            .navbar.navbar-fixed-top
+              .navbar-inner
+                .container
+                  button.btn.btn-navbar(type='button', data-toggle='collapse', data-target='.nav-collapse')
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                  | {{#linkTo 'index' class="brand"}}GizALift.ie{{/linkTo}}
+                  .nav-collapse.collapse
+                    ul.nav
+                      li {{#linkTo 'index'}}Home{{/linkTo}}
+                      li {{#linkTo 'find'}}Find a Lift{{/linkTo}}
+                      li {{#linkTo 'new'}}Offer a Lift{{/linkTo}}
+        .container-fluid.app
+          .row-fluid
+            .span9
+              .main
+                | {{ outlet }}
+            .span3
+              .main.visible-desktop
+                .user_info
+                  h2 Login
+                  hr
+                form#login-form
+                  .control-group
+                    label.control-label Email: 
+                    .controls
+                      input.input-medium(type='text', name='email')
+                  .control-group
+                    label.control-label Password: 
+                    .controls
+                      input.input-medium(type='password', name='password')
+                      a.pull-right(href='#') Forgot Password?
+                      div(style='clear: both;')
+                  .form-actions
+                    button.btn.btn-success(action='action', login='login') Login
+                    button.btn.btn-danger(action='action', register='register') Register
+                | {{outlet "sidebar"}}
+        footer
+          .container-fluid
+            .row-fluid
+              .span12
+                p.copyright
+                  | Copyright © {{ year "now" }}
+                  a(href='http://davidtobin.me', target='_blank') David Tobin
+
+    script(type='text/x-handlebars', data-template-name='login')
+      include login.jade
+
+    script(type='text/x-handlebars', data-template-name='index')
+      include index.jade
+
+    script(type='text/x-handlebars', data-template-name='find')
+      h1 Where are you?
+        hr
+          | {{ render countys }}
+
+    script(type='text/x-handlebars', data-template-name='countys')
+      .locations
+        | {{#each controller}}
+        .location(action='action', clickslate='clickSlate')
+          p {{ name }}
+        | {{/each}}
+    
+    script(type='text/x-handlebars', data-template-name='lifts')
+      .lifts
+        | {{#each controller}}
+        .lift
+          | {{#if paid }}
+          .pull-right.money $
+          | {{/if}}
+          h3
+            | {{ name }}
+            small {{ destination }}
+          blockquote
+            p {{ description }}
+          p.pull-right {{ user }}
+          p.date {{ date date }}
+          .pool-controls.pull-right
+            | {{#if registered}}
+            button(unregister='unregister') Unregister from Car Pool
+            | {{else}}
+            button(register='register') Register for Car Pool
+            | {{/if}}
+          .clearfix
+        | {{else}}
+        p.alert.alert-error There are currently no Car Pools from this location.
+        | {{/each}}
+
+    script(type='text/x-handlebars', data-template-name='new')
+      | {{#if content.name}}
+      h2 {{content.name}}
+        | {{else}}
+        h2 New Lift
+        | {{/if}}
+        hr
+        form.form-horizontal
+          .control-group
+            .control-label
+              label Title:
+            .controls
+              | {{ view nameTextField
+              | valueBinding=content.name }}
+          .control-group
+            .control-label
+              label Description:
+            .controls
+              | {{ view descriptionTextArea
+              | valueBinding=content.description }}
+          .control-group
+            .control-label
+              label Seeking Petrol Money?:
+            .controls
+              | {{view Ember.Checkbox checkedBinding=content.paid}}
+          .control-group
+            .control-label
+              label Destination:
+            .controls
+              | {{ view Ember.Select viewName="select"
+              | contentBinding=counties
+              | optionValuePath="content.id"
+              | optionLabelPath="content.name"
+              | selectionBinding=content.destinationObj
+              | valueBinding=content.destinationObj }}
+          .form-actions
+            button.btn.btn-primary(action='action', createnewlift='createNewLift', this='this') Create New Lift
+
+script(src='javascripts/libs/jquery-1.9.1.js')
+script(src='javascripts/libs/handlebars-1.0.0-rc.3.js')
+script(src='javascripts/libs/ember-1.0.0-rc.3.js')
+script(src='javascripts/libs/ember-data.min.js')
+script(src='javascripts/libs/bootstrap.min.js')
+script(src='javascripts/libs/moment.min.js')
+script(src='javascripts/app.js')
+script(src='javascripts/router.js')
+script(src='javascripts/controllers.js')
+script(src='javascripts/models.js')
+script(src='javascripts/helpers.js')
+script(src='javascripts/views.js')

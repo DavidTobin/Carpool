@@ -1,0 +1,14 @@
+form#login-form
+  .control-group
+      label.control-label Email: 
+      .controls
+        input.input-medium(type='text', name='email')
+    .control-group
+      label.control-label Password: 
+      .controls
+        input.input-medium(type='password', name='password')
+        a.pull-right(href='#') Forgot Password?
+        div(style='clear: both;')
+    .form-actions
+      button.btn.btn-success(action='action', login='login') Login
+      button.btn.btn-danger(action='action', register='register') Register
