@@ -1,5 +1,5 @@
 App.CountysController = Ember.ArrayController.extend({
-  clickSlate: function(county) {
+  clickSlate: function(county) {    
     this.controllerFor('application').set('activeCounty', county.get('id'));
     
     App.Router.router.transitionTo('lifts');

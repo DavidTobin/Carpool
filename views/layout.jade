@@ -61,19 +61,13 @@ html
       include login.jade
 
     script(type='text/x-handlebars', data-template-name='index')
-      include index.jade
+      include home.jade
 
     script(type='text/x-handlebars', data-template-name='find')
-      h1 Where are you?
-        hr
-          | {{ render countys }}
+      include looking/find.jade
 
     script(type='text/x-handlebars', data-template-name='countys')
-      .locations
-        | {{#each controller}}
-        .location(action='action', clickslate='clickSlate')
-          p {{ name }}
-        | {{/each}}
+      include looking/counties.jade
     
     script(type='text/x-handlebars', data-template-name='lifts')
       .lifts
@@ -91,9 +85,9 @@ html
           p.date {{ date date }}
           .pool-controls.pull-right
             | {{#if registered}}
-            button(unregister='unregister') Unregister from Car Pool
+            | <button {{action unregister this }}>Unregister from Car Pool</button>
             | {{else}}
-            button(register='register') Register for Car Pool
+            | <button {{ action register this }}>Register for Car Pool</button>
             | {{/if}}
           .clearfix
         | {{else}}
@@ -136,7 +130,7 @@ html
               | selectionBinding=content.destinationObj
               | valueBinding=content.destinationObj }}
           .form-actions
-            button.btn.btn-primary(action='action', createnewlift='createNewLift', this='this') Create New Lift
+            | <button class="btn btn-primary" {{ action createNewLift this }}>Create New Lift</button>
 
 script(src='javascripts/libs/jquery-1.9.1.js')
 script(src='javascripts/libs/handlebars-1.0.0-rc.3.js')

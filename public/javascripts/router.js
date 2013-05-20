@@ -20,11 +20,32 @@ App.ApplicationRoute = Ember.Route.extend({
 // });
 
 App.LiftsRoute = Ember.Route.extend({
+  setupController: function(controller) {
+    var county = this.controllerFor('application').get('activeCounty');
+    
+    if (typeof(county) !== 'undefined' && county.length > 0) {
+      // We're good to go!
+    } else {
+      return this.transitionTo('find');
+    }
+  },
+  
+  renderTemplate: function() {
+    var county = this.controllerFor('application').get('activeCounty');
+    
+    if (typeof(county) !== 'undefined' && county.length > 0) {
+      return this.render(); 
+    }
+  },
+  
   model: function(params) {
     var county_id = this.controllerFor('application').get('activeCounty');
-    return App.Lift.find({
-      county: county_id
-    });
+    
+    if (typeof(county_id) !== 'undefined' && county_id.length > 0) {
+      return App.Lift.find({
+        county: county_id
+      });
+    }
   }
 });
 
