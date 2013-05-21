@@ -69,32 +69,61 @@ html
     script(type='text/x-handlebars', data-template-name='countys')
       include looking/counties.jade
     
+    script(type='text/x-handlebars', data-template-name='lift')
+      h1 
+        small.pull-right {{ date date }}
+        | {{ name }}         
+      
+      hr      
+
+      .user-info
+        .username 
+          | David Tobin 
+          span(rel="tooltip", data-title="Successful Car Pools") (6)    
+      
+      .row-fluid      
+        .span8
+          h2 
+            small {{ location }} to {{ destination }}
+        
+          p {{ description }}
+          
+          hr
+          
+          .pool-controls.pull-right
+            | {{#if registered}}
+            | <button {{action unregister this bubbles=false }}>Unregister from Car Pool</button>
+            | {{else}}
+            | <button {{ action register this bubbles=false }}>Register for Car Pool</button>
+            | {{/if}}
+          
+        .span4
+          {{ view mapView }}
+    
     script(type='text/x-handlebars', data-template-name='lifts')
       .lifts
         | {{#each controller}}
-        .lift
-          | {{#if paid }}
-          .pull-right.money $
+        <div class="lift" {{ action 'openLift' this }}>
+        | {{#if paid }}
+        .pull-right.money $
+        | {{/if}}
+        h3
+          | {{ name }}
+          br
+          small {{ destination }}        
+        p.pull-right {{ user }}
+        p.date {{ date date }}
+        .pool-controls.pull-right
+          | {{#if registered}}
+          | <button {{action unregister this bubbles=false }}>Unregister from Car Pool</button>
+          | {{else}}
+          | <button {{ action register this bubbles=false }}>Register for Car Pool</button>
           | {{/if}}
-          h3
-            | {{ name }}
-            br
-            small {{ destination }}
-          blockquote
-            p {{ description }}
-          p.pull-right {{ user }}
-          p.date {{ date date }}
-          .pool-controls.pull-right
-            | {{#if registered}}
-            | <button {{action unregister this }}>Unregister from Car Pool</button>
-            | {{else}}
-            | <button {{ action register this }}>Register for Car Pool</button>
-            | {{/if}}
-          .clearfix
-        | {{else}}
-        p.alert.alert-error There are currently no Car Pools from this location.
-        | {{/each}}
-
+        .clearfix
+      | {{else}}
+      p.alert.alert-error There are currently no Car Pools from this location.
+      | {{/each}}
+      </div>
     script(type='text/x-handlebars', data-template-name='new')
       | {{#if content.name}}
       h2 {{content.name}}

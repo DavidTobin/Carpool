@@ -3,10 +3,9 @@ App.Router.map(function() {
    this.resource('login');
    
    this.resource('lifts');
-   this.resource('lift', function() {
-     this.resource('new');
-     this.resource('edit');
-   });   
+   this.resource('lift', { path: 'lift/:lift_id' });        
+   this.resource('new');
+   this.resource('edit');
 });
 
 App.ApplicationRoute = Ember.Route.extend({

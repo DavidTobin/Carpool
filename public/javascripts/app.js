@@ -2,6 +2,7 @@ App = Ember.Application.create({
   ready: function() {
     $(document).bind('ajaxComplete', function() {
       $('.dropdown-toggle').dropdown();
+      $('[rel="tooltip"]').tooltip();
     });
   }
 });
