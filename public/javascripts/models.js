@@ -8,6 +8,8 @@ App.Lift = DS.Model.extend({
   description: DS.attr('string'),
   paid: DS.attr('boolean'),
   user: DS.attr('string'),
+  location: DS.attr('string'),
   destination: DS.attr('string'),
+  destinationCoords: DS.attr('string'),
   registered: DS.attr('boolean')
 });

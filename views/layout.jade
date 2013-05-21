@@ -4,7 +4,7 @@ html
     meta(charset='utf-8')
     title Giz A Lift
     link(rel='stylesheet', href='stylesheets/bootstrap.min.css')
-    link(ref='stylesheet', href='stylesheets/bootstrap-responsive.min.css')
+    link(rel='stylesheet', href='stylesheets/bootstrap-responsive.min.css')
     link(href='http://fonts.googleapis.com/css?family=Michroma|Advent+Pro:400,200,600|Titillium+Web:400,300,700', rel='stylesheet', type='text/css')
     link(rel='stylesheet', href='stylesheets/style.css')
   body
@@ -54,7 +54,7 @@ html
             .row-fluid
               .span12
                 p.copyright
-                  | Copyright © {{ year "now" }}
+                  | Copyright © {{ year "now" }} 
                   a(href='http://davidtobin.me', target='_blank') David Tobin
 
     script(type='text/x-handlebars', data-template-name='login')
@@ -78,6 +78,7 @@ html
           | {{/if}}
           h3
             | {{ name }}
+            br
             small {{ destination }}
           blockquote
             p {{ description }}
@@ -110,10 +111,17 @@ html
               | valueBinding=content.name }}
           .control-group
             .control-label
-              label Description:
+              label Details:
             .controls
               | {{ view descriptionTextArea
               | valueBinding=content.description }}
+              
+              p.alert Note: It is a good idea to include what you are looking for in terms of payment here.
+          .control-group
+            .control-label
+              label When?
+            .controls
+              | {{ view datePicker valueBinding=content.date }} @ {{ view timePicker valueBinding=content.time }}
           .control-group
             .control-label
               label Seeking Petrol Money?:
@@ -121,14 +129,26 @@ html
               | {{view Ember.Checkbox checkedBinding=content.paid}}
           .control-group
             .control-label
-              label Destination:
+              label Starting From:
             .controls
               | {{ view Ember.Select viewName="select"
               | contentBinding=counties
               | optionValuePath="content.id"
               | optionLabelPath="content.name"
-              | selectionBinding=content.destinationObj
-              | valueBinding=content.destinationObj }}
+              | selectionBinding=content.locationObj
+              | prompt="Choose a county:"
+              | valueBinding=content.locationObj }}
+          .control-group
+            .control-label
+              label Destination:
+          
+            .controls
+              | {{ view destinationTextField
+              | valueBinding=content.destination
+              | disabled="disabled" }}
+              p This field is automatically filled in. Select a location on the map.
+            
+              #map-view.map
           .form-actions
             | <button class="btn btn-primary" {{ action createNewLift this }}>Create New Lift</button>
 
@@ -144,3 +164,4 @@ script(src='javascripts/controllers.js')
 script(src='javascripts/models.js')
 script(src='javascripts/helpers.js')
 script(src='javascripts/views.js')
+script(src='//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false')

@@ -49,7 +49,7 @@ App.LiftsRoute = Ember.Route.extend({
   }
 });
 
-App.NewRoute = Ember.Route.extend({
+App.NewRoute = Ember.Route.extend({        
   model: function() {
     var transaction = this.get('store').transaction();    
     // Create record
