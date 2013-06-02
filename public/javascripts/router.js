@@ -1,11 +1,15 @@
+var serverURL = 'http://localhost:3000';
+
 App.Router.map(function() {  
-   this.resource('find');
-   this.resource('login');
+   this.route('find');
+   this.route('login');
+   this.route('lifts', { path: '/lifts/:county' }); 
    
-   this.resource('lifts');
-   this.resource('lift', { path: 'lift/:lift_id' });        
-   this.resource('new');
-   this.resource('edit');
+   this.resource('lift', function() {
+    this.route('index', { path: '/:lift_id' });    
+    this.route('edit');
+    this.route('new');
+   });         
 });
 
 App.ApplicationRoute = Ember.Route.extend({
@@ -14,54 +18,52 @@ App.ApplicationRoute = Ember.Route.extend({
   }
 });
 
-// App.FindRoute = Ember.Route.extend({
-//   
-// });
 
-App.LiftsRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    var county = this.controllerFor('application').get('activeCounty');
-    
-    if (typeof(county) !== 'undefined' && county.length > 0) {
-      // We're good to go!
-    } else {
-      return this.transitionTo('find');
-    }
-  },
-  
+App.LiftIndexRoute = Ember.Route.extend({
   renderTemplate: function() {
-    var county = this.controllerFor('application').get('activeCounty');
-    
-    if (typeof(county) !== 'undefined' && county.length > 0) {
-      return this.render(); 
-    }
+    this.render('lift/index');
+    this.render('map_sidebar', {
+      outlet: 'sidebar'
+    });
   },
   
-  model: function(params) {
-    var county_id = this.controllerFor('application').get('activeCounty');
-    
-    if (typeof(county_id) !== 'undefined' && county_id.length > 0) {
-      return App.Lift.find({
-        county: county_id
-      });
-    }
+  model: function(params) {           
+    return App.Lift.find(params.lift_id);
   }
 });
 
-App.NewRoute = Ember.Route.extend({        
-  model: function() {
-    var transaction = this.get('store').transaction();    
-    // Create record
-    var lift = transaction.createRecord(App.Lift, {
-      name: null,
-      description: null,
-      paid: false,
-      destination: null,
-      date: new Date(),
-      user: 0,
-      registered: false
-    });
+App.LiftsRoute = Ember.Route.extend({               
+  setupController: function(controller, model) {          
+    controller.set('content', App.Lift.find({
+      county: model.county || model.id
+    }));
+  },
+  
+  serialize: function(model) {      
+    return { county: model.id };
+  }
+});
+
+App.LiftNewRoute = Ember.Route.extend({  
+  renderTemplate: function() {
+    this.render({
+      into: 'application'
+    });    
+  },
+  
+  /*setupController: function(controller, model) {
+    this._super();
     
-    return lift;
+    // Set default date and time
+    var d     = new Date(),
+        time  = [("0" + d.getHours()).slice(-2) ,("0" + d.getMinutes()).slice(-2)].join(":"),
+        date  = [d.getFullYear(), ("0" + (d.getMonth() + 1)).slice(-2), ("0" + d.getDate()).slice(-2)].join("-");
+    
+    controller.set('time', time);
+    controller.set('date', date);
+  },*/
+    
+  model: function() {
+    return App.Lift.createRecord();
   }
 });

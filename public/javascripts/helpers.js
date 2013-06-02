@@ -1,6 +1,7 @@
 // MomentJS Helper
 Ember.Handlebars.registerBoundHelper('date', function(date) {
-  return moment(date).calendar();
+  if (typeof(date) !== 'undefined' && date.length > 0)
+    return moment(date).calendar();
 });
 
 

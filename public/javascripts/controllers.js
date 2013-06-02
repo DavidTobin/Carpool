@@ -1,16 +1,16 @@
 App.CountysController = Ember.ArrayController.extend({
-  clickSlate: function(county) {    
-    this.controllerFor('application').set('activeCounty', county.get('id'));
+  clickSlate: function(county) {        
+    this.controllerFor('application').set('activeCounty', county);
     
-    this.transitionToRoute('lifts');
+    this.transitionToRoute('lifts', county);
   }
 });
 
-App.LiftController = Ember.ObjectController.extend({
-  content: {},
+App.LiftIndexController = Ember.ObjectController.extend({  
+  map: null,
   
   init: function() {
-    this._super();             
+    this._super();       
   },
   
   register: function(controller) {      
@@ -63,24 +63,30 @@ App.LiftsController = Ember.ArrayController.extend({
     controller.get('store').commit();        
   },
   
-  openLift: function(controller) {
-    this.transitionToRoute('lift', controller);
+  openLift: function(controller) {        
+    this.transitionToRoute('lift.index', controller);
   }
 });
 
-App.NewController = Ember.ObjectController.extend({  
+App.LiftNewController = Ember.ObjectController.extend({  
+  content: {
+    date: null,
+    time: null,
+    map: null,
+    geocoder: null,
+    destinationCoords: null
+  },
   counties: null,  
-  
-  init: function() {    
-    this._super();
-         
+       
+  init: function() {        
     this.set('counties', App.County.find());
   },
   
   createNewLift: function(controller) {
-    controller.one('didCreate', this, function() {
-      console.log(this);
-      this.transitionToRoute('lift', controller);
+    controller.one('didCreate', this, function(res) {      
+      this.transitionToRoute('lift', {
+        id: +res.id
+      });
     });
         
     // Change data to correct format
@@ -124,7 +130,7 @@ App.NewController = Ember.ObjectController.extend({
             controller.set('destination', results[1].formatted_address);            
           }
         });   
-      }); 
+      });
       
       $('html, body').animate({
         scrollTop: 0

@@ -23,32 +23,14 @@ html
                     ul.nav
                       li {{#linkTo 'index'}}Home{{/linkTo}}
                       li {{#linkTo 'find'}}Find a Lift{{/linkTo}}
-                      li {{#linkTo 'new'}}Offer a Lift{{/linkTo}}
+                      li {{#linkTo 'lift.new'}}Offer a Lift{{/linkTo}}
         .container-fluid.app
           .row-fluid
             .span9
               .main
                 | {{ outlet }}
-            .span3
-              .main.visible-desktop
-                .user_info
-                  h2 Login
-                  hr
-                form#login-form
-                  .control-group
-                    label.control-label Email: 
-                    .controls
-                      input.input-medium(type='text', name='email')
-                  .control-group
-                    label.control-label Password: 
-                    .controls
-                      input.input-medium(type='password', name='password')
-                      a.pull-right(href='#') Forgot Password?
-                      div(style='clear: both;')
-                  .form-actions
-                    button.btn.btn-success(action='action', login='login') Login
-                    button.btn.btn-danger(action='action', register='register') Register
-                | {{outlet "sidebar"}}
+            .span3              
+              | {{outlet "sidebar"}}
         footer
           .container-fluid
             .row-fluid
@@ -67,9 +49,9 @@ html
       include looking/find.jade
 
     script(type='text/x-handlebars', data-template-name='countys')
-      include looking/counties.jade
+      include looking/counties.jade        
     
-    script(type='text/x-handlebars', data-template-name='lift')
+    script(type='text/x-handlebars', data-template-name='lift/index')               
       h1 
         small.pull-right {{ date date }}
         | {{ name }}         
@@ -82,11 +64,8 @@ html
           span(rel="tooltip", data-title="Successful Car Pools") (6)    
       
       .row-fluid      
-        .span8
-          h2 
-            small {{ location }} to {{ destination }}
-        
-          p {{ description }}
+        .span12                  
+          p.text-large {{ description }}
           
           hr
           
@@ -95,10 +74,18 @@ html
             | <button {{action unregister this bubbles=false }}>Unregister from Car Pool</button>
             | {{else}}
             | <button {{ action register this bubbles=false }}>Register for Car Pool</button>
-            | {{/if}}
-          
-        .span4
-          {{ view mapView }}
+            | {{/if}}            
+      div.alert.alert-error This lift no longer exists.
+               
+    
+    script(type="text/x-handlebars", data-template-name='map_sidebar')
+      .main
+        h2 Destination 
+        hr
+        h3 
+          small {{ destination }}                
+        
+        {{ view mapView }}
     
     script(type='text/x-handlebars', data-template-name='lifts')
       .lifts
@@ -124,7 +111,7 @@ html
       p.alert.alert-error There are currently no Car Pools from this location.
       | {{/each}}
       </div>
-    script(type='text/x-handlebars', data-template-name='new')
+    script(type='text/x-handlebars', data-template-name='lift/new')
       | {{#if content.name}}
       h2 {{content.name}}
         | {{else}}
@@ -182,9 +169,9 @@ html
             | <button class="btn btn-primary" {{ action createNewLift this }}>Create New Lift</button>
 
 script(src='javascripts/libs/jquery-1.9.1.js')
-script(src='javascripts/libs/handlebars-1.0.0-rc.3.js')
-script(src='javascripts/libs/ember-1.0.0-rc.3.js')
-script(src='javascripts/libs/ember-data.min.js')
+script(src='javascripts/libs/handlebars-1.0.0-rc.4.js')
+script(src='javascripts/libs/ember-1.0.0-rc.4.js')
+script(src='javascripts/libs/ember-data-latest.js')
 script(src='javascripts/libs/bootstrap.min.js')
 script(src='javascripts/libs/moment.min.js')
 script(src='javascripts/app.js')
